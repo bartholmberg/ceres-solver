@@ -108,6 +108,39 @@ class DistanceFromCircleCost {
   // The measured x,y coordinate that should be on the circle.
   double xx_, yy_;
 };
+class DistanceFromCircleCost2 {
+ public:
+  DistanceFromCircleCost2(double xx, double yy) : xx_(xx), yy_(yy) {}
+  template <typename T>
+  bool operator()(const T* const x,
+                  const T* const y,
+                  const T* const m,  // r = m^2
+                  T* residual) const {
+    // Since the radius is parameterized as m^2, unpack m to get r.
+    T r = *m * *m;
+
+    // Get the position of the sample in the circle's coordinate system.
+    T xp = xx_ - *x;
+    T yp = yy_ - *y;
+
+    // It is tempting to use the following cost:
+    //
+    residual[0] = r - sqrt(xp*xp + yp*yp);
+    //
+    // which is the distance of the sample from the circle. This works
+    // reasonably well, but the sqrt() adds strong nonlinearities to the cost
+    // function. Instead, a different cost is used, which while not strictly a
+    // distance in the metric sense (it has units distance^2) it produces more
+    // robust fits when there are outliers. This is because the cost surface is
+    // more convex.
+    //residual[0] = r * r - xp * xp - yp * yp;
+    return true;
+  }
+
+ private:
+  // The measured x,y coordinate that should be on the circle.
+  double xx_, yy_;
+};
 
 int main(int argc, char** argv) {
   GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
@@ -127,7 +160,7 @@ int main(int argc, char** argv) {
   // Save initial values for comparison.
   double initial_x = x;
   double initial_y = y;
-  double initial_r = r;
+  double initial_r = sqrt(r);
 
   // Parameterize r as m^2 so that it can't be negative.
   double m = sqrt(r);
@@ -146,8 +179,8 @@ int main(int argc, char** argv) {
  // while (scanf("%lf %lf\n", &xx, &yy) == 2)
   {
     CostFunction* cost =
-        new AutoDiffCostFunction<DistanceFromCircleCost, 1, 1, 1, 1>(
-            new DistanceFromCircleCost(xx, yy));
+        new AutoDiffCostFunction<DistanceFromCircleCost2, 1, 1, 1, 1>(
+            new DistanceFromCircleCost2(xx, yy));
     problem.AddResidualBlock(cost, loss, &x, &y, &m);
     num_points++;
   }
@@ -162,7 +195,8 @@ int main(int argc, char** argv) {
   Solve(options, &problem, &summary);
 
   // Recover r from m.
-  r = m * m;
+ // r = m * m; //circle cost 1 (use squared)
+  r = m; // use circle cost 2
 
   std::cout << summary.BriefReport() << "\n";
   std::cout << "x : " << initial_x << " -> " << x << "\n";

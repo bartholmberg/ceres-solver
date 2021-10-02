@@ -64,13 +64,14 @@ int main(int argc, char** argv) {
 
   // Build the problem.
   Problem problem;
+  auto upper_bound = 6.8;
 
   // Set up the only cost function (also known as residual). This uses
   // auto-differentiation to obtain the derivative (jacobian).
   CostFunction* cost_function =
       new AutoDiffCostFunction<CostFunctor, 1, 1>(new CostFunctor);
   problem.AddResidualBlock(cost_function, nullptr, &x);
-
+  problem.SetParameterUpperBound(&x, 0, upper_bound);
   // Run the solver!
   Solver::Options options;
   options.minimizer_progress_to_stdout = true;
