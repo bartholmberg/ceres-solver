@@ -112,12 +112,16 @@ class DistanceFromCircleCost {
 int main(int argc, char** argv) {
   GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
   google::InitGoogleLogging(argv[0]);
-
   double x, y, r;
-  if (scanf("%lg %lg %lg", &x, &y, &r) != 3) {
-    fprintf(stderr, "Couldn't read first line.\n");
-    return 1;
-  }
+  // BAH, 10/2/2021,  fix parsing of command line. 
+  // How did this ever w??
+  sscanf(&(*argv[1]), "%lf", &x);
+  sscanf(&(*argv[2]), "%lf", &y);
+  sscanf(&(*argv[3]), "%lf", &r);
+
+
+
+ 
   fprintf(stderr, "Got x, y, r %lg, %lg, %lg\n", x, y, r);
 
   // Save initial values for comparison.
@@ -137,9 +141,10 @@ int main(int argc, char** argv) {
   }
 
   // Add the residuals.
-  double xx, yy;
+  double xx=x, yy=y;
   int num_points = 0;
-  while (scanf("%lf %lf\n", &xx, &yy) == 2) {
+ // while (scanf("%lf %lf\n", &xx, &yy) == 2)
+  {
     CostFunction* cost =
         new AutoDiffCostFunction<DistanceFromCircleCost, 1, 1, 1, 1>(
             new DistanceFromCircleCost(xx, yy));
