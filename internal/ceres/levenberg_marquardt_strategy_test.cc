@@ -147,7 +147,7 @@ TEST(LevenbergMarquardtStrategy, CorrectDiagonalToLinearSolver) {
   TrustRegionStrategy::PerSolveOptions pso;
 
   {
-      //BAH,  problem with glog. May need different version
+      //BAH,  problem with glog scoped mock log. May need different version
     //ScopedMockLog log;
     //EXPECT_CALL(log, Log(_, _, _)).Times(AnyNumber());
     // This using directive is needed get around the fact that there
