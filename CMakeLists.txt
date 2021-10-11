@@ -166,7 +166,7 @@ option(CUSTOM_BLAS
 # solving the nonlinear least squares problems.
 option(EIGENSPARSE "Enable Eigen as a sparse linear algebra library." ON)
 option(EXPORT_BUILD_DIR
-  "Export build directory using CMake (enables external use without install)." OFF)
+  "Export build directory using CMake (enables external use without install)." ON)
 option(BUILD_TESTING "Enable tests" ON)
 option(BUILD_DOCUMENTATION "Build User's Guide (html)" OFF)
 option(BUILD_EXAMPLES "Build examples" ON)
