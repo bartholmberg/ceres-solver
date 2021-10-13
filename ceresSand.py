@@ -1,22 +1,9 @@
 #
-# FIX up paths in solution
+# findReplace OS utility function.  TODO ,  as more added put in assembley
+#
+#
 import glob2 as glob
 import os, fnmatch
-# Using os.walk()
-#    os.chdir("D:\\build\\ceres-solver\\internal\\")
-#    for dirpath, dirs, files in os.walk('ceres'): 
-#        for filename in files:
-#            fname = os.path.join(dirpath,filename) 
-#            if fname.endswith('*.vcxproj'):
-#               fname.replace('C:\\repo\glog\\Release','d:\\build\\ceres-solver')
-#               print(fname)
-
-
-
-
-
-
-
 def findReplace(directory, find, replace, filePattern):
     for path, dirs, files in os.walk(os.path.abspath(directory)):
         for filename in fnmatch.filter(files, filePattern):
