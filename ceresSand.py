@@ -28,11 +28,14 @@ def findReplace(directory, find, replace, filePattern):
                 f.write(s)
    
 if __name__ == "__main__":
-    os.chdir("D:\\build\\ceres-solver\\internal\\")
+    os.chdir("D:\\build\\ceres-solver")
     a= glob.glob('.\**\*.vcxproj', recursive=True)
+    cnt=int(0)
     for filepath in a:
         with open(filepath) as file:
             s = file.read()
-        s = s.replace( 'd:\\build\\ceres-solver','D:\\build\\glog\\Release' )
+        s = s.replace( 'C:\\repo\\glog\\Release','D:\\build\\glog\\Release' )
         with open(filepath, "w") as file:
             file.write(s)
+            print('count: ',cnt, 'string: ', s) 
+            cnt=cnt+1

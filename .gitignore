@@ -24,3 +24,5 @@ jni/libs/
 .buildinfo
 bazel-*
 *.pyc
+.vs/ceresSand/v16/.suo
+.vs/ceresSand/v16/.suo
