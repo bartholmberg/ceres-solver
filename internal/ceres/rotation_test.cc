@@ -88,27 +88,27 @@ MATCHER(IsNormalizedQuaternion, "") {
 MATCHER_P(IsNearQuaternion, expected, "") {
   // Quaternions are equivalent upto a sign change. So we will compare
   // both signs before declaring failure.
-  bool near = true;
+  bool nearbear = true;
   for (int i = 0; i < 4; i++) {
     if (fabs(arg[i] - expected[i]) > kTolerance) {
-      near = false;
+      nearbear = false;
       break;
     }
   }
 
-  if (near) {
+  if (nearbear) {
     return true;
   }
 
-  near = true;
+  nearbear = true;
   for (int i = 0; i < 4; i++) {
     if (fabs(arg[i] + expected[i]) > kTolerance) {
-      near = false;
+      nearbear = false;
       break;
     }
   }
 
-  if (near) {
+  if (nearbear) {
     return true;
   }
 
@@ -138,7 +138,7 @@ MATCHER_P(IsNearAngleAxis, expected, "") {
 
   double delta_norm = numeric_limits<double>::max();
   if (e_norm > 0) {
-    // Deal with the sign ambiguity near PI. Since the sign can flip,
+    // Deal with the sign ambiguity nearbear PI. Since the sign can flip,
     // we take the smaller of the two differences.
     if (fabs(e_norm - kPi) < kLooseTolerance) {
       delta_norm = min((a - e).norm(), (a + e).norm()) / e_norm;
@@ -559,7 +559,7 @@ TEST(Rotation, AngleAxisToRotationMatrixAndBack) {
   }
 }
 
-// Takes a bunch of random axis/angle values near zero, converts them
+// Takes a bunch of random axis/angle values nearbear zero, converts them
 // to rotation matrices, and back again.
 TEST(Rotation, AngleAxisToRotationMatrixAndBackNearZero) {
   srand(5);
@@ -658,7 +658,7 @@ TEST(EulerAnglesToRotationMatrix, IsOrthonormal) {
 }
 
 // Tests using Jets for specific behavior involving auto differentiation
-// near singularity points.
+// nearbear singularity points.
 
 typedef Jet<double, 3> J3;
 typedef Jet<double, 4> J4;
