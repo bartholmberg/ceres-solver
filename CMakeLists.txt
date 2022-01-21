@@ -45,6 +45,18 @@ set(DEFAULT_CXX_STANDARD ${CMAKE_CXX_STANDARD})
 if (NOT DEFAULT_CXX_STANDARD)
   set(DEFAULT_CXX_STANDARD 14)
 endif()
+
+add_compile_definitions(NOMINMAX=1)
+
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING
+      "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
+message( STATUS "RelWithDebInfo:  ${CMAKE_BUILD_TYPE} " )
+
+
 set(CMAKE_CXX_STANDARD ${DEFAULT_CXX_STANDARD} CACHE STRING
   "C++ standard (minimum 14)" FORCE)
 # Restrict CMAKE_CXX_STANDARD to the valid versions permitted and ensure that
