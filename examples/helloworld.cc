@@ -46,10 +46,17 @@ using ceres::Solver;
 // x. The method operator() is templated so that we can then use an
 // automatic differentiation wrapper around it to generate its
 // derivatives.
-struct CostFunctor {
+struct CF0 {
   template <typename T>
-  bool operator()(const T* const x, T* residual) const {
-    residual[0] = 10.0 - x[0];
+  bool operator()(const T* const x0, T* residual) const {
+    residual[0] = 50.0 - x0[0];
+    return true;
+  }
+};
+struct CF1 {
+  template <typename T>
+  bool operator()(const T* const x0, const T* const x1, T* residual) const {
+    residual[0] = -80.0 + x0[0] - x1[0];
     return true;
   }
 };
@@ -59,19 +66,22 @@ int main(int argc, char** argv) {
 
   // The variable to solve for with its initial value. It will be
   // mutated in place by the solver.
-  double x = 0.5;
-  const double initial_x = x;
+  double x0 =0.5;
+  double x1 = 3.0;
+  std::vector<double> initial_x = {x0, x1};
 
   // Build the problem.
   Problem problem;
-  auto upper_bound = 6.8;
-
+  auto upper_bound = 68.0;
+  auto lower_bound = -68.0;
   // Set up the only cost function (also known as residual). This uses
   // auto-differentiation to obtain the derivative (jacobian).
-  CostFunction* cost_function =
-      new AutoDiffCostFunction<CostFunctor, 1, 1>(new CostFunctor);
-  problem.AddResidualBlock(cost_function, nullptr, &x);
-  problem.SetParameterUpperBound(&x, 0, upper_bound);
+  CostFunction* cf0 = new AutoDiffCostFunction<CF0, 1, 1>(new CF0);
+  CostFunction* cf1 = new AutoDiffCostFunction<CF1, 1, 1,1>(new CF1);
+  problem.AddResidualBlock(cf0, nullptr, &x0);
+  problem.AddResidualBlock(cf1, nullptr, &x0,&x1);
+  problem.SetParameterUpperBound(&x0, 0, upper_bound);
+  problem.SetParameterLowerBound(&x0, 0, lower_bound);
   // Run the solver!
   Solver::Options options;
   options.minimizer_progress_to_stdout = true;
@@ -79,6 +89,7 @@ int main(int argc, char** argv) {
   Solve(options, &problem, &summary);
 
   std::cout << summary.BriefReport() << "\n";
-  std::cout << "x : " << initial_x << " -> " << x << "\n";
+  std::cout << "x0: " << initial_x[0] << " x1: " << initial_x[1] << " -> " << x0
+            << " " << x1 << std::endl;
   return 0;
 }
