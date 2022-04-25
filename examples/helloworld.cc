@@ -72,8 +72,8 @@ int main(int argc, char** argv) {
 
   // Build the problem.
   Problem problem;
-  auto upper_bound = 68.0;
-  auto lower_bound = -68.0;
+  auto upper_bound = 40.0;
+  auto lower_bound = -40.0;
   // Set up the only cost function (also known as residual). This uses
   // auto-differentiation to obtain the derivative (jacobian).
   CostFunction* cf0 = new AutoDiffCostFunction<CF0, 1, 1>(new CF0);
@@ -82,6 +82,8 @@ int main(int argc, char** argv) {
   problem.AddResidualBlock(cf1, nullptr, &x0,&x1);
   problem.SetParameterUpperBound(&x0, 0, upper_bound);
   problem.SetParameterLowerBound(&x0, 0, lower_bound);
+  problem.SetParameterUpperBound(&x1, 0, upper_bound);
+  problem.SetParameterLowerBound(&x1, 0, lower_bound);
   // Run the solver!
   Solver::Options options;
   options.minimizer_progress_to_stdout = true;
