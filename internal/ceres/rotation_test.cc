@@ -88,6 +88,7 @@ MATCHER(IsNormalizedQuaternion, "") {
 MATCHER_P(IsNearQuaternion, expected, "") {
   // Quaternions are equivalent upto a sign change. So we will compare
   // both signs before declaring failure.
+  #undef near
   bool near = true;
   for (int i = 0; i < 4; i++) {
     if (fabs(arg[i] - expected[i]) > kTolerance) {

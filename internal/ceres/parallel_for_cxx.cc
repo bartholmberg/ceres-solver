@@ -29,6 +29,7 @@
 // Author: vitus@google.com (Michael Vitus)
 
 // This include must come before any #ifndef check on Ceres compile options.
+#define NOMINMAX
 #include "ceres/internal/port.h"
 
 #ifdef CERES_USE_CXX_THREADS

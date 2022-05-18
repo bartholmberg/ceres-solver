@@ -41,6 +41,7 @@ endif()
 #
 # Reflect a user-specified (via -D) CMAKE_CXX_STANDARD if present, otherwise
 # default to C++14.
+add_definitions(-DNOMINMAX)
 set(DEFAULT_CXX_STANDARD ${CMAKE_CXX_STANDARD})
 if (NOT DEFAULT_CXX_STANDARD)
   set(DEFAULT_CXX_STANDARD 14)
@@ -802,3 +803,7 @@ if (EXPORT_BUILD_DIR)
     "${Ceres_BINARY_DIR}/CeresConfig.cmake" @ONLY)
 
 endif (EXPORT_BUILD_DIR)
+#
+# Add build for python bindings
+#
+include(ceres_python_bindings/AddToCeres.cmake)
